@@ -1,0 +1,22 @@
+# Excluye archivos generados por CMake y Visual Studio.
+/out/
+/build/
+/cmake-build-*/
+/CMakeFiles/
+/CMakeCache.txt
+/compile_commands.json
+
+# Excluye dependencias descargadas por vcpkg: se reconstruyen desde vcpkg.json.
+/vcpkg_installed/
+
+# Excluye archivos temporales del editor y del sistema.
+.vs/
+*.user
+*.suo
+*.VC.db
+*.VC.VC.opendb
+.DS_Store
+Thumbs.db
+
+# El GLB del avión está incluido en assets/models/airplane.glb.
+# Verifica su licencia antes de publicarlo en un repositorio público.

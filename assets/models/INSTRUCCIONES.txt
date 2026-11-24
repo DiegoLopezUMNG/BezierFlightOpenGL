@@ -1,0 +1,12 @@
+MODELO 3D INCLUIDO
+
+Archivo: airplane.glb
+Formato: glTF 2.0 Binary (GLB)
+
+El archivo se generó a partir del OBJ y las texturas proporcionadas en avion-plane-toy.zip. El OBJ declaraba AVION.mtl, pero ese archivo MTL no venía dentro del ZIP, así que se reconstruyeron las referencias a imágenes *_Base_Color.png mediante los nombres de los materiales.
+
+Contenido verificado del GLB: 21 mallas, 18 materiales y 17 imágenes de color incrustadas. Dos materiales sin una textura Base_Color disponible utilizan un color neutro. Los mapas Normal_DirectX, Height, Roughness y Metallic que venían en el ZIP no se incorporaron al GLB; la aplicación usa la textura de color y calcula la iluminación Phong en sus shaders.
+
+Las coordenadas del OBJ estaban expresadas en centímetros. El GLB se centró alrededor del origen y se convirtió a metros. El eje frontal local es +X; el eje vertical es +Y. Por ese motivo, MODEL_FORWARD_AXIS en src/main.cpp está configurado como (1, 0, 0).
+
+No reemplaces el archivo sin revisar el eje frontal, la escala y el pivote del nuevo modelo. Antes de redistribuir públicamente el modelo, verifica que su licencia lo permita.
