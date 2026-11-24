@@ -1,8 +1,8 @@
 # Vuelo 3D con OpenGL y curva de Bézier
 
-Proyecto educativo en C++17 y OpenGL 3.3 Core. Importa un avión desde glTF/GLB, lo anima a lo largo de una curva cúbica de Bézier, orienta el morro según la tangente de la curva y aplica iluminación Phong mediante shaders externos.
+Proyecto educativo en C++ y OpenGL 3.3 Core. Importa un avión desde glTF/GLB, lo anima a lo largo de una curva cúbica de Bézier, orienta el morro según la tangente de la curva y aplica iluminación Phong mediante shaders externos.
 
-> **El modelo del avión ya está incluido** en `assets/models/airplane.glb`. Es un GLB autocontenido: sus texturas de color están incrustadas, así que no requiere copiar carpetas de imágenes por separado. El modelo se centró alrededor del origen, sus unidades originales en centímetros se convirtieron a metros y el morro apunta al eje local +X.
+ El modelo se centró alrededor del origen, sus unidades originales en centímetros se convirtieron a metros y el morro apunta al eje local +X.
 
 ## 1. Arquitectura
 
