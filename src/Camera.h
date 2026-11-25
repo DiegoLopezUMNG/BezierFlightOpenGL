@@ -22,7 +22,7 @@ public: // Expone los métodos usados por el programa principal.
     float Pitch; // Guarda el ángulo vertical de orientación.
     float MovementSpeed; // Guarda la velocidad de desplazamiento en unidades por segundo.
 
-    Camera(glm::vec3 position = glm::vec3(0.0f, 3.0f, 14.0f)); // Inicializa la cámara en una posición que mira al escenario.
+    Camera(glm::vec3 position = glm::vec3(0.0f, 8.0f, 28.0f)); // Inicializa la cámara en una posición que mira al escenario.
     glm::mat4 GetViewMatrix() const; // Construye la matriz de vista con lookAt.
     void ProcessKeyboard(CameraMovement direction, float deltaTime); // Actualiza la posición según el movimiento y el tiempo.
     void ProcessMouseMovement(float xOffset, float yOffset); // Actualiza yaw y pitch con el desplazamiento del ratón.

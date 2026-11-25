@@ -20,6 +20,8 @@
 namespace { // Agrupa constantes y funciones privadas del archivo principal.
 constexpr int WINDOW_WIDTH = 1280; // Define el ancho inicial de la ventana en píxeles.
 constexpr int WINDOW_HEIGHT = 720; // Define la altura inicial de la ventana en píxeles.
+constexpr float LANDSCAPE_SCALE = 120.0f; // Amplía el paisaje importado hasta unos 19.3 metros virtuales de ancho.
+const glm::vec3 LANDSCAPE_POSITION(0.345f, -9.2f, 1.888f); // Centra el paisaje y deja su punto más alto por debajo del avión.
 constexpr float MODEL_SCALE = 1.0f; // Permite ajustar el tamaño del modelo importado sin modificar el archivo 3D.
 // Según la prueba visual, el morro real del avión apunta hacia el eje local -X.
 
@@ -112,7 +114,7 @@ int main(int argc, char* argv[]) { // Define el punto de entrada del programa y 
             throw std::runtime_error("No fue posible inicializar GLAD."); // Informa del fallo al cargar OpenGL.
         } // Cierra la comprobación de GLAD.
         glEnable(GL_DEPTH_TEST); // Activa la prueba de profundidad para ocultar superficies detrás de otras.
-        glClearColor(0.035f, 0.055f, 0.09f, 1.0f); // Define el color del fondo de la escena.
+        glClearColor(0.55f, 0.73f, 0.88f, 1.0f); // Define un fondo azul claro que acompaña el paisaje.
         std::cout << "OpenGL: " << reinterpret_cast<const char*>(glGetString(GL_VERSION)) << '\n'; // Imprime la versión de OpenGL del controlador.
         const std::filesystem::path projectRoot(APP_ROOT_DIR); // Recupera la carpeta del proyecto definida por CMake.
         const std::filesystem::path suppliedModelPath = argc > 1 ? std::filesystem::path(argv[1]) : std::filesystem::path("assets/models/airplane.glb"); // Obtiene la ruta recibida o la ruta predeterminada del avión.
@@ -122,6 +124,12 @@ int main(int argc, char* argv[]) { // Define el punto de entrada del programa y 
             Shader lineShader((projectRoot / "shaders" / "line.vert").string(), (projectRoot / "shaders" / "line.frag").string()); // Carga y enlaza los shaders de la línea de trayectoria.
             Model airplane; // Crea el contenedor que recibirá las mallas del avión.
             if (!airplane.Load(modelPath)) { std::cerr << "No se encontró un modelo válido. Copia tu avión a assets/models/airplane.glb o pasa su ruta como argumento.\n"; } // Continúa mostrando la escena aunque todavía no exista el modelo.
+            Model landscape; // Crea un segundo modelo independiente del avión.
+            const bool landscapeLoaded = landscape.Load(projectRoot / "assets/models/landscape.glb"); // Importa una sola vez el paisaje estático con sus texturas incrustadas.
+            if (!landscapeLoaded) { std::cerr << "No se pudo cargar assets/models/landscape.glb; el vuelo continuara sin paisaje.\n"; } // Informa el fallo sin impedir la animación del avión.
+            const glm::mat4 landscapeTranslation = glm::translate(glm::mat4(1.0f), LANDSCAPE_POSITION); // Construye la traslación fija del paisaje.
+            const glm::mat4 landscapeScale = glm::scale(glm::mat4(1.0f), glm::vec3(LANDSCAPE_SCALE)); // Construye su escala uniforme.
+            const glm::mat4 landscapeMatrix = landscapeTranslation * landscapeScale; // Combina las transformaciones estáticas fuera del bucle de renderizado.
             const float k = 0.55228475f; // Factor de control de Bézier para aproximar un cuarto de elipse.
             const float rx = 10.0f, rz = 6.0f, h = 2.0f; // Define los radios horizontal y longitudinal y la altura del circuito.
             using V = glm::vec3; // Abrevia el tipo de vector tridimensional de los puntos de control.
@@ -184,12 +192,19 @@ int main(int argc, char* argv[]) { // Define el punto de entrada del programa y 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Limpia el color y la profundidad del fotograma anterior.
                 DrawPath(lineShader, pathVAO, pathVertexCount, view, projection); // Dibuja primero la trayectoria de referencia.
                 phongShader.use(); // Activa el programa que calcula la iluminación Phong.
-                phongShader.setMat4("uModel", modelMatrix); // Envía la matriz que posiciona y orienta el avión.
                 phongShader.setMat4("uView", view); // Envía la matriz de vista de la cámara.
                 phongShader.setMat4("uProjection", projection); // Envía la matriz de proyección perspectiva.
                 phongShader.setVec3("uLightPosition", glm::vec3(-4.0f, 10.0f, 6.0f)); // Sitúa la fuente de luz en el escenario.
                 phongShader.setVec3("uLightColor", glm::vec3(1.0f, 0.96f, 0.88f)); // Define un color ligeramente cálido para la luz.
                 phongShader.setVec3("uViewPosition", camera.Position); // Envía la posición de la cámara para calcular el reflejo especular.
+                if (landscapeLoaded) { // Dibuja el paisaje únicamente si pudo importarse correctamente.
+                    phongShader.setMat4("uModel", landscapeMatrix); // Envía la transformación fija del paisaje, sin animación.
+                    phongShader.setFloat("uAmbientStrength", 0.40f); // Ilumina suavemente las zonas en sombra del terreno.
+                    phongShader.setFloat("uSpecularStrength", 0.12f); // Reduce el brillo para dar un acabado menos metálico.
+                    phongShader.setFloat("uShininess", 16.0f); // Define un reflejo especular más amplio en el paisaje.
+                    landscape.Draw(phongShader); // Renderiza las mallas y texturas del escenario estático con el mismo shader Phong.
+                } // Termina el dibujado del paisaje.
+                phongShader.setMat4("uModel", modelMatrix); // Restablece la matriz de modelo animada del avión.
                 phongShader.setFloat("uAmbientStrength", 0.22f); // Define la intensidad del término ambiental.
                 phongShader.setFloat("uSpecularStrength", 0.55f); // Define la intensidad del reflejo especular.
                 phongShader.setFloat("uShininess", 32.0f); // Define la concentración del brillo especular.

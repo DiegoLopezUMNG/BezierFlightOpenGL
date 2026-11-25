@@ -4,7 +4,7 @@
 #include <cmath> // Proporciona seno, coseno y otras operaciones trigonométricas.
 
 Camera::Camera(glm::vec3 position) // Define el constructor que recibe la posición inicial.
-    : Position(position), Front(0.0f, 0.0f, -1.0f), Up(0.0f, 1.0f, 0.0f), Right(1.0f, 0.0f, 0.0f), WorldUp(0.0f, 1.0f, 0.0f), Yaw(-90.0f), Pitch(-10.0f), MovementSpeed(8.0f) { // Inicializa los vectores y ángulos de la cámara.
+    : Position(position), Front(0.0f, 0.0f, -1.0f), Up(0.0f, 1.0f, 0.0f), Right(1.0f, 0.0f, 0.0f), WorldUp(0.0f, 1.0f, 0.0f), Yaw(-90.0f), Pitch(-24.0f), MovementSpeed(8.0f) { // Inicializa los vectores y ángulos de la cámara.
     updateCameraVectors(); // Calcula los vectores definitivos a partir del yaw y el pitch.
 } // Termina el constructor.
 
@@ -34,6 +34,7 @@ void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime) { // Pro
     } // Cierra el movimiento hacia abajo.
 } // Termina ProcessKeyboard.
 
+
 void Camera::ProcessMouseMovement(float xOffset, float yOffset) { // Gira la cámara según el movimiento del ratón.
     constexpr float sensitivity = 0.12f; // Convierte píxeles del cursor en grados de rotación.
     Yaw += xOffset * sensitivity; // Modifica el ángulo horizontal de la mirada.
@@ -42,9 +43,9 @@ void Camera::ProcessMouseMovement(float xOffset, float yOffset) { // Gira la cá
 } // Termina ProcessMouseMovement.
 
 void Camera::Reset() { // Restablece los valores de la cámara.
-    Position = glm::vec3(0.0f, 3.0f, 14.0f); // Recupera la posición inicial.
+    Position = glm::vec3(0.0f, 8.0f, 28.0f); // Recupera la posición inicial.
     Yaw = -90.0f; // Recupera el ángulo horizontal inicial.
-    Pitch = -10.0f; // Recupera el ángulo vertical inicial.
+    Pitch = -24.0f; // Recupera el ángulo vertical inicial.
     updateCameraVectors(); // Recalcula los vectores de orientación.
 } // Termina Reset.
 

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Paisaje Con Cascada
+* source:	https://sketchfab.com/3d-models/paisaje-con-cascada-3b5df46b3d964daebe1092478d6b0cb5
+* author:	Jones El Robot🤖 (https://sketchfab.com/vicho.jimenezcartes)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Paisaje Con Cascada" (https://sketchfab.com/3d-models/paisaje-con-cascada-3b5df46b3d964daebe1092478d6b0cb5) by Jones El Robot🤖 (https://sketchfab.com/vicho.jimenezcartes) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
